@@ -69,8 +69,27 @@ use overload qq("") => 'string_unless_carp'
            , bool   => 'isEmpty';
 
 # To satisfy overload in static resolving.
-sub toString() { my $load = shift->load; return $load->toString if (defined $load); }
-sub string()   { my $load = shift->load; return $load->string   if (defined $load); }
+sub toString() {
+    my $load = shift->load;
+
+    if (defined $load) {
+        return $load->toString;
+    }
+    else {
+        carp "Missing header object.";
+    }
+}
+
+sub string()   {
+    my $load = shift->load;
+
+    if (defined $load) {
+        return $load->string;
+    }
+    else {
+        carp "Missing header object.";
+    }
+}
 
 sub string_unless_carp()
 {   my $self = shift;
@@ -122,7 +141,7 @@ sub new(@)
 
     $class->SUPER::new(@_);
 }
- 
+
 sub init($)
 {   my ($self, $args) = @_;
 
